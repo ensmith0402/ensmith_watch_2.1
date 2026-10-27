@@ -119,20 +119,18 @@ void app_main(void)
         strncpy(default_net.password, cfg->wifi_password, sizeof(default_net.password) - 1);
         default_net.priority = 10;
 
-        wifi_cfg_init(&(wifi_cfg_config_t){
-            WIFI_CFG_DEFAULTS,
-            .default_networks = (strlen(cfg->wifi_ssid) > 0) ? &default_net : NULL,
-            .default_network_count = (strlen(cfg->wifi_ssid) > 0) ? 1 : 0,
-            .stop_provisioning_on_connect = true,
-            .enable_ap = true,
-            .default_ap = {
-                .ssid = "ensmith-watch",
-            }
-        });
+        wifi_cfg_config_t wifi_cfg_config = WIFI_CFG_DEFAULT_CONFIG();
+        wifi_cfg_config.default_networks = (strlen(cfg->wifi_ssid) > 0) ? &default_net : NULL;
+        wifi_cfg_config.default_network_count = (strlen(cfg->wifi_ssid) > 0) ? 1 : 0;
+        wifi_cfg_config.stop_provisioning_on_connect = true;
+        wifi_cfg_config.enable_ap = true;
+        strncpy(wifi_cfg_config.default_ap.ssid, "ensmith-watch", sizeof(wifi_cfg_config.default_ap.ssid) - 1);
+        wifi_cfg_config.default_ap.ssid[sizeof(wifi_cfg_config.default_ap.ssid) - 1] = '\0';
 
         ESP_LOGI(TAG, "Запуск Wi-Fi и точки доступа ensmith-watch...");
         // wifi_cfg_wait_connected(30000); // Убрано, чтобы не блокировать загрузку
 
+        wifi_cfg_init(&wifi_cfg_config);
         web_api_init();
     } else {
         ESP_LOGI(TAG, "Wi-Fi выключен в настройках — пропускаем");
@@ -188,6 +186,9 @@ void app_main(void)
 
     speedtest_ui_create();
     screen_manager_register(SCREEN_SPEEDTEST, speedtest_ui_get_screen());
+
+    lv_obj_t *s_speed_screen = speedtest_ui_create_speed_screen();
+    screen_manager_register(SCREEN_NET_SPEED, s_speed_screen);
 
     settings_ui_create();
     screen_manager_register(SCREEN_SETTINGS, settings_ui_get_screen());

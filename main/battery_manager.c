@@ -132,3 +132,14 @@ bool battery_manager_is_charging(void)
     }
     return false;
 }
+
+// Настройка AXP2101 для выключения по кнопке PWR
+void battery_power_off(void) {
+    ESP_LOGW(TAG, "Настройка выключения по кнопке PWR...");
+    // Настраиваем кнопку PWR на выключение при удержании 4 секунды
+    uint8_t reg22[2] = {0x22, 0b110};
+    i2c_master_transmit(s_axp_dev, reg22, 2, 1000);
+    
+    uint8_t reg27[2] = {0x27, 0x10};
+    i2c_master_transmit(s_axp_dev, reg27, 2, 1000);
+}

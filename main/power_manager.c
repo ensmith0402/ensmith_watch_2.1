@@ -18,7 +18,7 @@ static const char *TAG = "POWER";
 #define QMI8658_CTRL7       0x08
 #define QMI8658_AX_L        0x35
 
-#define INACTIVITY_SEC      20
+#define INACTIVITY_SEC      60
 #define TILT_THRESHOLD_Z    0.4f
 #define TILT_THRESHOLD_Y    0.5f
 

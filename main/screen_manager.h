@@ -18,6 +18,7 @@ typedef enum {
     SCREEN_TIMER,
     SCREEN_ALARM,
     SCREEN_BLE,
+    SCREEN_NET_SPEED,
     SCREEN_MAX
 } screen_id_t;
 
