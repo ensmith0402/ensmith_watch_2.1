@@ -8,6 +8,8 @@ LV_FONT_DECLARE(font_ru_24);
 LV_FONT_DECLARE(font_ru_32);
 LV_FONT_DECLARE(font_ru_48);
 LV_FONT_DECLARE(font_ru_96);
+LV_FONT_DECLARE(font_seg_115);
+LV_FONT_DECLARE(font_seg_40);
 
 static const char *TAG = "WATCH_UI";
 
@@ -74,14 +76,14 @@ lv_obj_t *watch_ui_create(void)
     s_time_label = lv_label_create(s_screen);
     lv_label_set_text(s_time_label, "00:00");
     lv_obj_set_style_text_color(s_time_label, lv_color_white(), 0);
-    lv_obj_set_style_text_font(s_time_label, &font_ru_96, 0);
+    lv_obj_set_style_text_font(s_time_label, &font_seg_115, 0);
     lv_obj_align(s_time_label, LV_ALIGN_CENTER, 0, -70);
 
     // Дата (шрифт 48)
     s_date_label = lv_label_create(s_screen);
     lv_label_set_text(s_date_label, "01.01.2026");
-    lv_obj_set_style_text_color(s_date_label, lv_color_hex(0xAAAAAA), 0);
-    lv_obj_set_style_text_font(s_date_label, &font_ru_48, 0);
+    lv_obj_set_style_text_color(s_date_label, lv_color_hex(0xDDDDDD), 0);
+    lv_obj_set_style_text_font(s_date_label, &font_seg_40, 0);
     lv_obj_align(s_date_label, LV_ALIGN_CENTER, 0, 60);
 
     // День недели (шрифт 32)
