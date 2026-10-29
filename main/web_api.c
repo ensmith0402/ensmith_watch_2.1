@@ -412,6 +412,14 @@ esp_err_t web_api_init(void)
     };
     httpd_register_uri_handler(server, &page_uri);
 
+    // Регистрируем эту же страницу для корневого пути (/)
+    httpd_uri_t root_uri = {
+        .uri = "/",
+        .method = HTTP_GET,
+        .handler = settings_page_handler,
+    };
+    httpd_register_uri_handler(server, &root_uri);
+
     httpd_uri_t scan_uri = {
         .uri = "/api/scan",
         .method = HTTP_GET,
