@@ -33,9 +33,9 @@ static void menu_btn_cb(lv_event_t *e)
     } else if (strcmp(name, "Настройки") == 0) {
         screen_manager_switch(SCREEN_SETTINGS);
     } else if (strcmp(name, "Таймер") == 0) {
-        // TODO: экран таймера
-    } else if (strcmp(name, "Будильник") == 0) {
-        screen_manager_switch(SCREEN_ALARM);
+        screen_manager_switch(SCREEN_TIMER);
+    } else if (strcmp(name, "Калькулятор") == 0) {
+        screen_manager_switch(SCREEN_CALC);
     } else if (strcmp(name, "BLE") == 0) {
         // TODO: экран BLE
     }
@@ -82,7 +82,7 @@ lv_obj_t *menu_ui_create(void)
     lv_obj_set_style_text_font(title, &font_ru_24, 0);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 15);
 
-    create_menu_button(s_menu_screen, LV_SYMBOL_BELL,     "Будильник", 25,  70);
+    create_menu_button(s_menu_screen, LV_SYMBOL_EDIT, "Калькулятор", 25,  70);
     create_menu_button(s_menu_screen, LV_SYMBOL_PLAY,     "Таймер",    145, 70);
     create_menu_button(s_menu_screen, LV_SYMBOL_SETTINGS, "Настройки", 265, 70);
 

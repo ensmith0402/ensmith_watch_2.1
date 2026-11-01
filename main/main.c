@@ -15,6 +15,8 @@
 #include "watch_ui.h"
 #include "battery_manager.h"
 #include "screen_manager.h"
+#include "timer_ui.h"
+#include "calculator_ui.h"
 #include "speedtest_ui.h"
 #include "menu_ui.h"
 #include "about_ui.h"
@@ -24,7 +26,6 @@
 #include "settings_brightness.h"
 #include "settings_timezone.h"
 #include "settings_reset.h"
-#include "settings_alarm.h"
 #include "settings_wifi_info.h"
 #include "power_manager.h"
 #include "web_api.h"
@@ -184,6 +185,12 @@ void app_main(void)
     about_ui_create();
     screen_manager_register(SCREEN_ABOUT, about_ui_get_screen());
 
+    calculator_ui_create();
+    screen_manager_register(SCREEN_CALC, calculator_ui_get_screen());
+
+    timer_ui_create();
+    screen_manager_register(SCREEN_TIMER, timer_ui_get_screen());
+
     speedtest_ui_create();
     screen_manager_register(SCREEN_SPEEDTEST, speedtest_ui_get_screen());
 
@@ -208,9 +215,7 @@ void app_main(void)
     settings_reset_create();
     screen_manager_register(SCREEN_RESET, settings_reset_get_screen());
 
-    settings_alarm_create();
-    screen_manager_register(SCREEN_ALARM, settings_alarm_get_screen());
-
+        
     screen_manager_switch(SCREEN_WATCH);
 
     if (cfg->wifi_enabled) {
