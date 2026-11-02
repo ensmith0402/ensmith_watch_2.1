@@ -30,8 +30,6 @@ static void settings_item_cb(lv_event_t *e)
     } else if (strcmp(name, "Wi-Fi") == 0) {
         settings_wifi_info_update();
         screen_manager_switch(SCREEN_WIFI_INFO);
-    } else if (strcmp(name, "API-ключ") == 0) {
-        screen_manager_switch(SCREEN_KEY);
     } else if (strcmp(name, "Часовой пояс") == 0) {
         screen_manager_switch(SCREEN_TIMEZONE);
     } else if (strcmp(name, "Сброс") == 0) {
@@ -88,10 +86,9 @@ lv_obj_t *settings_ui_create(void)
 
     create_list_item(s_screen, LV_SYMBOL_IMAGE,    "Яркость",       70);
     create_list_item(s_screen, LV_SYMBOL_WIFI,     "Wi-Fi",         140);
-    create_list_item(s_screen, LV_SYMBOL_KEYBOARD, "API-ключ",      210);
-    create_list_item(s_screen, LV_SYMBOL_GPS,      "Часовой пояс",  280);
-    create_list_item(s_screen, LV_SYMBOL_TRASH,    "Сброс",         350);
-    create_list_item(s_screen, LV_SYMBOL_LEFT,     "Назад",         420);
+    create_list_item(s_screen, LV_SYMBOL_GPS,      "Часовой пояс",  210);
+    create_list_item(s_screen, LV_SYMBOL_TRASH,    "Сброс",         280);
+    create_list_item(s_screen, LV_SYMBOL_LEFT,     "Назад",         350);
 
     ESP_LOGI(TAG, "Экран настроек создан");
     return s_screen;

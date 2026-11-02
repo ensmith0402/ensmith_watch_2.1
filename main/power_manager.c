@@ -3,6 +3,7 @@
 #include "bsp/esp-bsp.h"
 #include "driver/i2c_master.h"
 #include "esp_log.h"
+#include "esp_pm.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <math.h>
@@ -117,6 +118,11 @@ static void screen_on(void)
 static void power_task(void *arg)
 {
     int tick = 0;
+    
+    // Запрещаем процессору уходить в легкий сон (чтобы vTaskDelay работал стабильно от батареи)
+    esp_pm_lock_handle_t pm_lock;
+    esp_pm_lock_create(ESP_PM_NO_LIGHT_SLEEP, 0, "power_task", &pm_lock);
+    esp_pm_lock_acquire(pm_lock);
 
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(200));

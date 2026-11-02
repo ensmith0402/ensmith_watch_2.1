@@ -15,13 +15,13 @@
 #include "watch_ui.h"
 #include "battery_manager.h"
 #include "screen_manager.h"
+#include "recorder_ui.h"
 #include "timer_ui.h"
 #include "calculator_ui.h"
 #include "speedtest_ui.h"
 #include "menu_ui.h"
 #include "config_manager.h"
 #include "settings_ui.h"
-#include "settings_key.h"
 #include "settings_brightness.h"
 #include "settings_timezone.h"
 #include "settings_reset.h"
@@ -188,6 +188,9 @@ void app_main(void)
     timer_ui_create();
     screen_manager_register(SCREEN_TIMER, timer_ui_get_screen());
 
+    recorder_ui_create();
+    screen_manager_register(SCREEN_RECORDER, recorder_ui_get_screen());
+
     speedtest_ui_create();
     screen_manager_register(SCREEN_SPEEDTEST, speedtest_ui_get_screen());
 
@@ -200,9 +203,7 @@ void app_main(void)
     settings_wifi_info_create();
     screen_manager_register(SCREEN_WIFI_INFO, settings_wifi_info_get_screen());
 
-    settings_key_create();
-    screen_manager_register(SCREEN_KEY, settings_key_get_screen());
-
+        
     settings_brightness_create();
     screen_manager_register(SCREEN_BRIGHTNESS, settings_brightness_get_screen());
 

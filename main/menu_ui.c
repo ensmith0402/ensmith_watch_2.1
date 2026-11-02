@@ -26,7 +26,9 @@ static void menu_btn_cb(lv_event_t *e)
     const char *name = (const char *)lv_event_get_user_data(e);
     ESP_LOGI(TAG, "Нажата кнопка: %s", name);
 
-    if (strcmp(name, "Назад") == 0) {
+    if (strcmp(name, "Диктофон") == 0) {
+        screen_manager_switch(SCREEN_RECORDER);
+    } else if (strcmp(name, "Назад") == 0) {
         screen_manager_switch(SCREEN_WATCH);
     } else if (strcmp(name, "Настройки") == 0) {
         screen_manager_switch(SCREEN_SETTINGS);
@@ -84,7 +86,8 @@ lv_obj_t *menu_ui_create(void)
     create_menu_button(s_menu_screen, LV_SYMBOL_PLAY,     "Таймер",    145, 70);
     create_menu_button(s_menu_screen, LV_SYMBOL_SETTINGS, "Настройки", 265, 70);
 
-    create_menu_button(s_menu_screen, LV_SYMBOL_LEFT,     "Назад",     25, 200);
+    create_menu_button(s_menu_screen, LV_SYMBOL_AUDIO,    "Диктофон",  25, 200);
+    create_menu_button(s_menu_screen, LV_SYMBOL_LEFT,     "Назад",     145, 200);
 
     ESP_LOGI(TAG, "Экран меню создан");
     return s_menu_screen;
