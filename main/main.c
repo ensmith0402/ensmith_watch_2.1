@@ -19,7 +19,6 @@
 #include "calculator_ui.h"
 #include "speedtest_ui.h"
 #include "menu_ui.h"
-#include "about_ui.h"
 #include "config_manager.h"
 #include "settings_ui.h"
 #include "settings_key.h"
@@ -182,9 +181,7 @@ void app_main(void)
     menu_ui_create();
     screen_manager_register(SCREEN_MENU, menu_ui_get_screen());
 
-    about_ui_create();
-    screen_manager_register(SCREEN_ABOUT, about_ui_get_screen());
-
+        
     calculator_ui_create();
     screen_manager_register(SCREEN_CALC, calculator_ui_get_screen());
 
