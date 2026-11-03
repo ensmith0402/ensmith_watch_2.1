@@ -67,6 +67,7 @@ esp_err_t battery_manager_get(battery_info_t *out_info)
     if (!out_info || !s_initialized) return ESP_ERR_INVALID_STATE;
 
     memset(out_info, 0, sizeof(*out_info));
+    out_info->level = -1; // По умолчанию - нет данных
 
     // 1. Power Status (0x00) — VBUS Good на бите 5
     uint8_t status1 = 0;
@@ -99,6 +100,9 @@ esp_err_t battery_manager_get(battery_info_t *out_info)
         } else {
             out_info->level = -1;
         }
+    } else {
+        ESP_LOGE(TAG, "Не удалось прочитать процент заряда");
+        // level остается -1, что означает "нет данных"
     }
 
     // 4. Напряжение

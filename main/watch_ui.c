@@ -1,4 +1,5 @@
 #include "watch_ui.h"
+#include <time.h>
 #include "screen_manager.h"
 #include "config_manager.h"
 #include "esp_log.h"
@@ -104,21 +105,27 @@ void watch_ui_update(const rtc_time_t *time_utc)
     const app_config_t *cfg = config_get();
     int8_t tz = cfg->timezone_offset;
 
-    int hour = time_utc->hour + tz;
-    int day = time_utc->day;
-    int month = time_utc->month;
-    int year = time_utc->year;
-    int weekday = time_utc->weekday;
+    // Правильный расчет даты с учетом часового пояса
+    struct tm tm_utc = {0};
+    tm_utc.tm_year = time_utc->year - 1900;
+    tm_utc.tm_mon = time_utc->month - 1;
+    tm_utc.tm_mday = time_utc->day;
+    tm_utc.tm_hour = time_utc->hour;
+    tm_utc.tm_min = time_utc->minute;
+    tm_utc.tm_sec = time_utc->second;
 
-    if (hour >= 24) {
-        hour -= 24;
-        day += 1;
-        weekday = (weekday + 1) % 7;
-    } else if (hour < 0) {
-        hour += 24;
-        day -= 1;
-        weekday = (weekday + 6) % 7;
-    }
+    // Прибавляем часовой пояс и нормализуем
+    tm_utc.tm_hour += tz;
+    time_t t = mktime(&tm_utc);
+    
+    struct tm tm_local;
+    localtime_r(&t, &tm_local);
+
+    int hour = tm_local.tm_hour;
+    int day = tm_local.tm_mday;
+    int month = tm_local.tm_mon + 1;
+    int year = tm_local.tm_year + 1900;
+    int weekday = tm_local.tm_wday; // 0 = Воскресенье
 
     char buf[32];
 

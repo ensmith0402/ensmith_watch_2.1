@@ -80,6 +80,7 @@ static esp_err_t status_get_handler(httpd_req_t *req)
 
     free(json_str);
 
+    cJSON_Delete(root);
     return ESP_OK;
 }
 
