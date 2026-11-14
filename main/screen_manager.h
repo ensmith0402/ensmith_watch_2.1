@@ -21,6 +21,8 @@ typedef enum {
     SCREEN_NET_SPEED,
     SCREEN_CALC,
     SCREEN_RECORDER,
+    SCREEN_LEVEL,
+    SCREEN_FLASHLIGHT,
     SCREEN_MAX
 } screen_id_t;
 

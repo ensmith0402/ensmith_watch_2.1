@@ -15,6 +15,7 @@
 #include "watch_ui.h"
 #include "battery_manager.h"
 #include "screen_manager.h"
+#include "flashlight_ui.h"
 #include "recorder_ui.h"
 #include "timer_ui.h"
 #include "calculator_ui.h"
@@ -194,7 +195,10 @@ void app_main(void)
     speedtest_ui_create();
     screen_manager_register(SCREEN_SPEEDTEST, speedtest_ui_get_screen());
 
-    lv_obj_t *s_speed_screen = speedtest_ui_create_speed_screen();
+    flashlight_ui_create();
+    screen_manager_register(SCREEN_FLASHLIGHT, flashlight_ui_get_screen());
+
+        lv_obj_t *s_speed_screen = speedtest_ui_create_speed_screen();
     screen_manager_register(SCREEN_NET_SPEED, s_speed_screen);
 
     settings_ui_create();

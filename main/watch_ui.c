@@ -69,6 +69,7 @@ lv_obj_t *watch_ui_create(void)
     lv_obj_set_style_border_width(s_screen, 0, 0);
     lv_obj_set_style_pad_all(s_screen, 0, 0);
 
+    lv_obj_add_flag(s_screen, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(s_screen, watch_gesture_cb, LV_EVENT_GESTURE, NULL);
 
     create_status_bar(s_screen);

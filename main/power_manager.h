@@ -12,6 +12,7 @@ esp_err_t power_manager_init(void);
  * @brief Запуск задачи энергосбережения
  */
 void power_manager_start(void);
+esp_err_t imu_read_accel(float *ax, float *ay, float *az);
 
 /**
  * @brief Сбросить таймер бездействия (вызывается при таче)

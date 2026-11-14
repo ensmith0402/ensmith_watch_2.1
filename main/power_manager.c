@@ -78,7 +78,7 @@ static esp_err_t imu_init(void)
     return ESP_OK;
 }
 
-static esp_err_t imu_read_accel(float *ax, float *ay, float *az)
+esp_err_t imu_read_accel(float *ax, float *ay, float *az)
 {
     uint8_t buf[6];
     esp_err_t ret = imu_read_regs(QMI8658_AX_L, buf, 6);

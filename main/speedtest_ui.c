@@ -30,7 +30,7 @@ static void speedtest_gesture_cb(lv_event_t *e)
     lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
     if (dir == LV_DIR_RIGHT) {
         ESP_LOGI(TAG, "Свайп вправо → часы");
-        screen_manager_switch(SCREEN_WATCH);
+        screen_manager_switch(SCREEN_FLASHLIGHT);
     } else if (dir == LV_DIR_LEFT) {
         ESP_LOGI(TAG, "Свайп влево → проверка скорости");
         screen_manager_switch(SCREEN_NET_SPEED);
@@ -273,7 +273,7 @@ static void speed_gesture_cb(lv_event_t *e)
         screen_manager_switch(SCREEN_SPEEDTEST);
     } else if (dir == LV_DIR_LEFT) {
         ESP_LOGI(TAG, "Свайп влево → часы");
-        screen_manager_switch(SCREEN_WATCH);
+        screen_manager_switch(SCREEN_FLASHLIGHT);
     }
 }
 
