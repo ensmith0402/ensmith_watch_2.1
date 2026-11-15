@@ -4,7 +4,9 @@
 #include "bsp/esp-bsp.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "math.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 LV_FONT_DECLARE(font_ru_24);
 LV_FONT_DECLARE(font_seg_115);
@@ -40,6 +42,30 @@ static void update_display(void) {
     bsp_display_unlock();
 }
 
+// Функция для проигрывания звукового сигнала
+static void play_beep_task(void *arg) {
+    int sample_rate = 16000;
+    int duration_ms = 150;
+    int samples = (sample_rate * duration_ms) / 1000;
+    int16_t *buffer = malloc(samples * sizeof(int16_t));
+    
+    if (buffer) {
+        // Генерируем синусоиду 880 Гц (нота Ля первой октавы)
+        for (int i = 0; i < samples; i++) {
+            buffer[i] = (int16_t)(8000 * sin(2.0 * M_PI * 880.0 * i / sample_rate));
+        }
+    }
+
+    // Пищим 3 раза
+    for (int i = 0; i < 3; i++) {
+        if (buffer) ESP_LOGI(TAG, "Пик!"); // Звук отключен до настройки аудио
+        vTaskDelay(pdMS_TO_TICKS(300));
+    }
+    
+    if (buffer) free(buffer);
+    vTaskDelete(NULL);
+}
+
 static void timer_task(void *pvParameters) {
     while (s_timer_running && s_remaining_sec > 0) {
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -50,11 +76,25 @@ static void timer_task(void *pvParameters) {
     
     if (s_remaining_sec <= 0 && s_timer_running) {
         s_timer_running = false;
+        
+        // Показываем 00:00 и мигаем красным 3 раза
         bsp_display_lock(0);
-        lv_label_set_text(s_time_label, "Время!");
-        bsp_display_unlock();
-        // Тут можно добавить звуковой сигнал
+        lv_label_set_text(s_time_label, "00:00");
+        for (int i = 0; i < 3; i++) {
+            lv_obj_set_style_text_color(s_time_label, lv_color_hex(0xFF0000), 0);
+            bsp_display_unlock();
+            vTaskDelay(pdMS_TO_TICKS(300));
+            bsp_display_lock(0);
+            lv_obj_set_style_text_color(s_time_label, lv_color_white(), 0);
+            bsp_display_unlock();
+            vTaskDelay(pdMS_TO_TICKS(300));
+        }
+        bsp_display_lock(0);
+        
+        // Запускаем пищалку
+        xTaskCreate(play_beep_task, "beep", 4096, NULL, 5, NULL);
     }
+    
     s_timer_task_handle = NULL;
     vTaskDelete(NULL);
 }
@@ -62,6 +102,8 @@ static void timer_task(void *pvParameters) {
 static void start_btn_cb(lv_event_t *e) {
     if (s_timer_running || s_remaining_sec <= 0) return;
     s_timer_running = true;
+    // Возвращаем белый цвет, если был красным
+    lv_obj_set_style_text_color(s_time_label, lv_color_white(), 0);
     xTaskCreate(timer_task, "timer", 4096, NULL, 5, &s_timer_task_handle);
 }
 
@@ -74,6 +116,7 @@ static void stop_btn_cb(lv_event_t *e) {
     s_timer_running = false;
     s_remaining_sec = 0;
     update_display();
+    lv_obj_set_style_text_color(s_time_label, lv_color_white(), 0);
 }
 
 static void inc_time_cb(lv_event_t *e) {
@@ -95,7 +138,7 @@ lv_obj_t *timer_ui_create(void) {
     lv_obj_set_style_text_font(s_time_label, &font_seg_115, 0);
     lv_obj_align(s_time_label, LV_ALIGN_CENTER, 0, -30);
 
-    // Кнопка добавления времени (нажимаем на сами цифры или кнопку сверху)
+    // Кнопка добавления времени
     lv_obj_t *add_btn = lv_button_create(s_screen);
     lv_obj_set_size(add_btn, 120, 40);
     lv_obj_align(add_btn, LV_ALIGN_TOP_MID, 0, 20);
