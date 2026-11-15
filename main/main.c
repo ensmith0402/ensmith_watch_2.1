@@ -237,5 +237,12 @@ void app_main(void)
     xTaskCreate(battery_task, "battery", 4096, NULL, 2, NULL);
     xTaskCreate(wifi_icon_task, "wifi_icon", 4096, NULL, 2, NULL);
     power_manager_start();
+    
+    // Принудительно применяем яркость через 1 секунду после старта (когда железо точно проснулось)
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    const app_config_t *final_cfg = config_get();
+    bsp_display_brightness_set(final_cfg->brightness);
+    ESP_LOGI(TAG, "Яркость принудительно применена: %d%%", final_cfg->brightness);
+
     ESP_LOGI(TAG, "Готов к работе");
 }
