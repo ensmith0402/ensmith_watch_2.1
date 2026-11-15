@@ -1,6 +1,7 @@
 #include "power_manager.h"
 #include "config_manager.h"
 #include "bsp/esp-bsp.h"
+#include "lvgl.h"
 #include "driver/i2c_master.h"
 #include "esp_log.h"
 #include "esp_pm.h"
@@ -129,11 +130,26 @@ static void power_task(void *arg)
         tick++;
 
         if (s_screen_on) {
-            if (tick % 5 == 0) {
-                s_inactivity_counter++;
-                if (s_inactivity_counter >= INACTIVITY_SEC) {
-                    screen_off();
-                    s_inactivity_counter = 0;
+            // Проверяем, не нажат ли экран прямо сейчас
+            lv_indev_t *indev = lv_indev_get_next(NULL);
+            bool is_pressed = false;
+            while (indev) {
+                if (lv_indev_get_state(indev) == LV_INDEV_STATE_PRESSED) {
+                    is_pressed = true;
+                    break;
+                }
+                indev = lv_indev_get_next(indev);
+            }
+
+            if (is_pressed) {
+                s_inactivity_counter = 0; // Сбрасываем таймер при касании
+            } else {
+                if (tick % 5 == 0) {
+                    s_inactivity_counter++;
+                    if (s_inactivity_counter >= INACTIVITY_SEC) {
+                        screen_off();
+                        s_inactivity_counter = 0;
+                    }
                 }
             }
         }

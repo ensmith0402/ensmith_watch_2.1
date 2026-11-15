@@ -98,6 +98,21 @@ static void wifi_icon_task(void *arg)
     }
 }
 
+
+// Глобальный обработчик касаний для сброса таймера сна
+static void global_touch_cb(lv_event_t *e) {
+    power_manager_reset_timer();
+}
+
+// Рекурсивно добавляем обработчик на все объекты экрана
+static void add_touch_handler(lv_obj_t *obj) {
+    lv_obj_add_event_cb(obj, global_touch_cb, LV_EVENT_PRESSED, NULL);
+    uint32_t child_cnt = lv_obj_get_child_count(obj);
+    for (uint32_t i = 0; i < child_cnt; i++) {
+        add_touch_handler(lv_obj_get_child(obj, i));
+    }
+}
+
 void app_main(void)
 {
     esp_err_t ret = nvs_flash_init();

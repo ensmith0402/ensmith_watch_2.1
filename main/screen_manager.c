@@ -1,5 +1,6 @@
 #include "screen_manager.h"
 #include "esp_log.h"
+#include "power_manager.h"
 
 static const char *TAG = "SCREEN_MGR";
 
@@ -31,6 +32,7 @@ void screen_manager_switch(screen_id_t id)
     }
 
     s_current = id;
+    power_manager_reset_timer();
     lv_scr_load(s_screens[id]);
     ESP_LOGI(TAG, "Switched to screen %d", id);
 }
